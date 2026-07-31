@@ -2,31 +2,26 @@ const express = require("express");
 
 const app = express();
 
-app.use("/user", [
-  (req, res, next) => {
-    console.log("Handling the route user!!");
-    next();
-    // res.send("Response!!");
-  },
-  (req, res, next) => {
-    console.log("Handling the route user 2!!");
+const {adminAuth,userAuth} = require("./middlewares/auth");
 
-    // res.send("2nd Response!!");
-    next();
-  },
-],
-  (req, res, next) => {
-    console.log("Handling the route user 3!!");
+app.use("/admin", adminAuth);
 
-    //res.send("3rd Response!!");
-    next();
-  },
-  (req, res) => {
-    console.log("Handling the route user 4!!");
 
-    res.send("4th Response!!");
-  },
-);
+app.post("/user/login", (req,res) => {
+  res.send("User logged in successfully!")
+});
+
+app.get("/user/data", userAuth, (req, res) => {
+  res.send("User Data Sent");
+});
+
+app.get("/admin/getAllData", (req, res) => {
+  res.send("All Data Sent");
+});
+
+app.get("/admin/deleteUser", (req, res) => {
+  res.send("Delete a user Data Sent");
+});
 
 app.listen(6666, () => {
   console.log("Server is successfully listening on port 6666...");
